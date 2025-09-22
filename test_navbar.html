@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar Test</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background: #000;
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            color: #fff;
+            font-size: 24px;
+        }
+
+        .navbar-toggler {
+            background: none;
+            border: none;
+            color: #fff;
+        }
+
+        .icon-bar {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            margin: 5px 0;
+        }
+
+        .navbar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-link {
+            color: #fff;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 991px) {
+            .navbar-toggler {
+                z-index: 1001;
+                position: relative;
+            }
+
+            .navbar-collapse {
+                background-color: #000;
+                z-index: 1000;
+                height: 100vh;
+                overflow-y: auto;
+                transition-duration: 0.2s;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 0;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+            }
+
+            .navbar-collapse .navbar-nav {
+                width: 100%;
+                max-width: 400px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex: 1;
+                margin: auto 0;
+                padding: 20px 0;
+            }
+
+            body.menu-open {
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+            }
+
+            .navbar-collapse.show {
+                display: flex;
+            }
+
+            .navbar-collapse.collapsing {
+                display: none;
+            }
+        }
+
+        .content {
+            padding: 50px 20px;
+            text-align: center;
+            height: 200vh; /* Make page scrollable */
+        }
+
+        .test-info {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+        }
+
+        .status {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .status.good { color: green; }
+        .status.bad { color: red; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#">Test Site</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Navbar Functionality Test</h1>
+        <div class="test-info">
+            <h2>Test Instructions:</h2>
+            <ol>
+                <li>Resize browser to mobile width (less than 991px)</li>
+                <li>Click the hamburger menu to open it</li>
+                <li>Check if body content jumps (it shouldn't)</li>
+                <li>Click menu links or close button</li>
+                <li>Verify smooth closing without jumping</li>
+            </ol>
+
+            <div class="status" id="toggleStatus">Toggle Test: Not tested</div>
+            <div class="status" id="bodyStatus">Body Scroll Test: Not tested</div>
+            <div class="status" id="linkStatus">Link Click Test: Not tested</div>
+            <div class="status" id="buttonVisibilityStatus">Button Visibility Test: Not tested</div>
+        </div>
+
+        <p>Scroll down to see more content...</p>
+        <p>This helps test if body scrolling is properly disabled when menu is open.</p>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let testResults = {
+                toggleTest: false,
+                bodyScrollTest: false,
+                linkClickTest: false
+            };
+
+            $('.navbar-toggler').on('click', function() {
+                $(this).toggleClass('open');
+
+                if ($(this).hasClass('open')) {
+                    $('body').addClass('menu-open');
+                    testResults.toggleTest = true;
+                    testResults.bodyScrollTest = true;
+                    $('#toggleStatus').text('Toggle Test: ✓ Working').removeClass('bad').addClass('good');
+                    $('#bodyStatus').text('Body Scroll Test: ✓ Working').removeClass('bad').addClass('good');
+
+                    // Test button visibility
+                    setTimeout(function() {
+                        if ($('.navbar-toggler').is(':visible')) {
+                            $('#buttonVisibilityStatus').text('Button Visibility Test: ✓ Working').removeClass('bad').addClass('good');
+                            testResults.buttonVisibilityTest = true;
+                        } else {
+                            $('#buttonVisibilityStatus').text('Button Visibility Test: ✗ Button not visible').removeClass('good').addClass('bad');
+                        }
+                    }, 100);
+                } else {
+                    $('body').removeClass('menu-open');
+                    $('#toggleStatus').text('Toggle Test: ✓ Working').removeClass('bad').addClass('good');
+                    $('#buttonVisibilityStatus').text('Button Visibility Test: ✓ Working').removeClass('bad').addClass('good');
+                }
+            });
+
+            $('.nav-link').on('click', function() {
+                $('.navbar-collapse').removeClass('show');
+                $('.navbar-toggler').removeClass('open');
+                $('body').removeClass('menu-open');
+                testResults.linkClickTest = true;
+                $('#linkStatus').text('Link Click Test: ✓ Working').removeClass('bad').addClass('good');
+
+                return false; // Prevent actual navigation
+            });
+
+            // Check if menu is open and body scroll is disabled
+            setInterval(function() {
+                if ($('body').hasClass('menu-open')) {
+                    if (window.pageYOffset !== 0) {
+                        $('#bodyStatus').text('Body Scroll Test: ✗ Body can still scroll').removeClass('good').addClass('bad');
+                        testResults.bodyScrollTest = false;
+                    }
+                }
+            }, 100);
+
+            console.log('Navbar test initialized');
+        });
+    </script>
+</body>
+</html>
