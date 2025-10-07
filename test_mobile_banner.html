@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Banner Test</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            background-color: #333;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .test-info {
+            padding: 20px;
+            background-color: #444;
+            margin-bottom: 20px;
+        }
+        .main-banner {
+            background-color: #e56400;
+            border: 2px solid #fff;
+            margin-bottom: 20px;
+        }
+        .banner-content {
+            text-align: center;
+            padding: 20px;
+        }
+        .screen-size {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-size" id="screenSize">Screen: Unknown</div>
+
+    <div class="test-info">
+        <h2>Mobile Banner Padding Test</h2>
+        <p>This page tests the responsive .main-banner padding. Resize your browser window or use mobile device testing tools.</p>
+        <ul>
+            <li><strong>Mobile (≤767px):</strong> padding: 7.5rem 0 3.5rem 0 (120px top, 56px bottom)</li>
+            <li><strong>Tablet (≥768px):</strong> padding: 3rem 0 6rem 0 (48px top, 96px bottom)</li>
+            <li><strong>Desktop:</strong> Default padding (if any)</li>
+        </ul>
+    </div>
+
+    <div class="main-banner">
+        <div class="banner-content">
+            <h1>Main Banner Area</h1>
+            <p>Current screen size: <span id="currentSize">Unknown</span></p>
+            <p>Top padding should be: <span id="expectedPadding">Unknown</span></p>
+        </div>
+    </div>
+
+    <div style="padding: 20px;">
+        <h3>How to test:</h3>
+        <ol>
+            <li>Open browser developer tools (F12)</li>
+            <li>Use device simulation or responsive design mode</li>
+            <li>Test different screen sizes:</li>
+            <ul>
+                <li>Mobile: 320px, 375px, 414px (should show 7.5rem top padding)</li>
+                <li>Tablet: 768px, 1024px (should show 3rem top padding)</li>
+                <li>Desktop: 1200px+ (should show desktop styles)</li>
+            </ul>
+            <li>Observe the orange banner area height changes</li>
+        </ol>
+    </div>
+
+    <script>
+        function updateScreenSize() {
+            const width = window.innerWidth;
+            const screenSize = document.getElementById('screenSize');
+            const currentSize = document.getElementById('currentSize');
+            const expectedPadding = document.getElementById('expectedPadding');
+
+            let sizeLabel = '';
+            let paddingLabel = '';
+
+            if (width <= 767) {
+                sizeLabel = 'Mobile';
+                paddingLabel = '7.5rem top (120px)';
+            } else if (width >= 768 && width <= 991) {
+                sizeLabel = 'Tablet';
+                paddingLabel = '3rem top (48px)';
+            } else {
+                sizeLabel = 'Desktop';
+                paddingLabel = 'Desktop styles';
+            }
+
+            screenSize.textContent = `Screen: ${width}px (${sizeLabel})`;
+            currentSize.textContent = `${width}px - ${sizeLabel}`;
+            expectedPadding.textContent = paddingLabel;
+        }
+
+        // Update on load and resize
+        updateScreenSize();
+        window.addEventListener('resize', updateScreenSize);
+    </script>
+</body>
+</html>
